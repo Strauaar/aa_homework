@@ -22,13 +22,6 @@ class Simon
   end
 
   def take_turn
-    puts "Ready?"
-    sleep(0.7)
-    system("clear")
-    puts "Go!"
-    sleep(0.5)
-    system("clear")
-
     show_sequence
     require_sequence
 
