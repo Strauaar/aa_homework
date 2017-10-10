@@ -1,5 +1,6 @@
+require 'byebug'
 class Board
-  attr_accessor :cups, :name1, :name2
+  attr_accessor :cups, :name1, :name2, :current_player, :first_player, :second_player
 
   def initialize(name1, name2)
     @cups = Array.new(14) {Array.new}
@@ -32,12 +33,13 @@ class Board
 
     cup_idx = start_pos
     until stones.empty?
+
       cup_idx += 1
       cup_idx = 0 if cup_idx > 13
-      if cup_idx == 6 && @current_player == @first_player
-        @cups[6] << stones.pop
-      elsif cup_idx == 13 && @current_player == @second_player
-        @cups[13] << stones.pop
+      if cup_idx == 6
+        @cups[6] << stones.pop if @current_player == @first_player
+      elsif cup_idx == 13
+        @cups[13] << stones.pop if @current_player == @second_player
       else
         @cups[cup_idx] << stones.pop
       end
@@ -48,11 +50,16 @@ class Board
   end
 
   def next_turn(ending_cup_idx)
-
-    if ending_cup_idx == 6 || ending_cup_idx == 13
+    # byebug
+    if ending_cup_idx == 0 || ending_cup_idx == 5
       :prompt
-    elsif @cups[ending_cup_idx].count == 1
+    elsif @cups[ending_cup_idx-1].count == 1
       :switch
+    elsif ending_cup_idx == 0 && @current_player == @first_player
+      :prompt
+    elsif ending_cup_idx == 5 && @current_player == @second_player
+      :prompt
+
     else
       ending_cup_idx
     end
@@ -84,3 +91,7 @@ class Board
     end
   end
 end
+
+b = Board.new("a","b")
+b.current_player = b.second_player
+b.make_move(10, "b")
