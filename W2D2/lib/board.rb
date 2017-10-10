@@ -22,48 +22,41 @@ class Board
     if !(start_pos > 0) || !(start_pos < 13)
       raise "Invalid starting cup"
     end
+
     true
   end
 
   def make_move(start_pos, current_player_name)
-    render
-    next_turn(start_pos)
-    copy_cups = @cups.dup
-    count = @cups[start_pos].count
+    stones = @cups[start_pos]
     @cups[start_pos] = []
-    cup = -1
 
-    ((start_pos + 1)..(start_pos + count)).each do |i|
-      idx = i % 13
-      if @current_player == @first_player
-        @cups[idx] << :stone unless idx == 13
-        @cups[(idx + 1) % 13] << :stone if idx == 13
-      elsif @current_player == @second_player
-        @cups[idx] << :stone unless idx == 6
-        @cups[(idx + 1) % 13] << :stone if idx == 6
+    cup_idx = start_pos
+    until stones.empty?
+      cup_idx += 1
+      cup_idx = 0 if cup_idx > 13
+      if cup_idx == 6 && @current_player == @first_player
+        @cups[6] << stones.pop
+      elsif cup_idx == 13 && @current_player == @second_player
+        @cups[13] << stones.pop
+      else
+        @cups[cup_idx] << stones.pop
       end
-      cup = idx
     end
-    p cup
 
-    if (cup == 13 && @current_player == @second_player) || (cup == 6 && @current_player == @first_player)
-      return :prompt
-    elsif @current_player == @first_player && (cup <= 0 && cup < 6)
-      return :switch
-    elsif @current_player == @second_player && (cup <= 7 && cup <= 13)
-      return :switch
-    end
-    if !copy_cups[cup].empty?
-      return cup
-    end
+    render
+    next_turn(cup_idx)
   end
 
   def next_turn(ending_cup_idx)
-    if @current_player == @first_player
-      @current_player = @second_player
+
+    if ending_cup_idx == 6 || ending_cup_idx == 13
+      :prompt
+    elsif @cups[ending_cup_idx].count == 1
+      :switch
     else
-      @current_player = @first_player
+      ending_cup_idx
     end
+
 
   end
 
@@ -81,5 +74,13 @@ class Board
   end
 
   def winner
+    p_1_count = @cups[6].count
+    p_2_count = @cups[13].count
+
+    if p_1_count == p_2_count
+      :draw
+    else
+      p_1_count > p_2_count ? @first_player : @second_player
+    end
   end
 end
