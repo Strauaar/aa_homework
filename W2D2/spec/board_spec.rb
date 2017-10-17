@@ -54,37 +54,37 @@ describe Board do
     before(:each) do
       board.make_move(0, "Erica")
     end
-    # 
-    # it "empties the selected cup" do
-    #   expect(board.cups[0]).to be_empty
-    # end
 
-    # it "distributes the stones from the selected cup" do
-    #   expect(board.cups[1..4]).to all( eq(five_stone_cup))
-    #   expect(board.cups[5]).to eq( four_stone_cup )
-    # end
-    #
-    # it "places stones in the current player's cup" do
-    #   board.make_move(5, "Erica")
-    #   expect(board.cups[6]).to eq([:stone])
-    # end
-    #
-    # it "doesn't place stones in the opponent's cup" do
-    #   # not a starting move; assumed to be an automatic move after finishing a play on this cup full of stones
-    #   board.make_move(12, "Erica")
-    #   expect(board.cups[13]).to be_empty
-    #   expect(board.cups[3]).to eq( six_stone_cup )
-    # end
-    #
-    # it "calls #render at the end of each turn" do
-    #   expect(board).to receive(:render)
-    #   board.make_move(1, "Erica")
-    # end
-    #
-    # it "calls helper method #next_turn" do
-    #   expect(board).to receive(:next_turn)
-    #   board.make_move(1, "Erica")
-    # end
+    it "empties the selected cup" do
+      expect(board.cups[0]).to be_empty
+    end
+
+    it "distributes the stones from the selected cup" do
+      expect(board.cups[1..4]).to all( eq(five_stone_cup))
+      expect(board.cups[5]).to eq( four_stone_cup )
+    end
+
+    it "places stones in the current player's cup" do
+      board.make_move(5, "Erica")
+      expect(board.cups[6]).to eq([:stone])
+    end
+
+    it "doesn't place stones in the opponent's cup" do
+      # not a starting move; assumed to be an automatic move after finishing a play on this cup full of stones
+      board.make_move(12, "Erica")
+      expect(board.cups[13]).to be_empty
+      expect(board.cups[3]).to eq( six_stone_cup )
+    end
+
+    it "calls #render at the end of each turn" do
+      expect(board).to receive(:render)
+      board.make_move(1, "Erica")
+    end
+
+    it "calls helper method #next_turn" do
+      expect(board).to receive(:next_turn)
+      board.make_move(1, "Erica")
+    end
 
     context "when the turn ended on an empty cup" do
       it "returns :switch" do
@@ -98,11 +98,11 @@ describe Board do
       end
     end
     #
-    # context "when the turn ended on a cup with stones already in it" do
-    #   it "returns the cup's array index" do
-    #     expect(board.make_move(5, "Erica")).to eq(9)
-    #   end
-    # end
+    context "when the turn ended on a cup with stones already in it" do
+      it "returns the cup's array index" do
+        expect(board.make_move(5, "Erica")).to eq(9)
+      end
+    end
   end
 
 
