@@ -1,4 +1,5 @@
 class SnackBox
+  attr_reader :data
   SNACK_BOX_DATA = {
     1 => {
       "bone" => {
@@ -111,10 +112,14 @@ class MetaCorgiSnacks
 
   def method_missing(name, *args)
     # Your code goes here...
+    info = @snack_box.data[@box_id][name.to_s]['info']
+    tastiness = @snack_box.data[@box_id][name.to_s]['tastiness']
+    return "#{name.capitalize}: #{info} : #{tastiness}"
+    
   end
 
 
   def self.define_snack(name)
-    # Your code goes here...
+
   end
 end
