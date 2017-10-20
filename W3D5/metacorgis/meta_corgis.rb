@@ -110,16 +110,31 @@ class MetaCorgiSnacks
     @box_id = box_id
   end
 
-  def method_missing(name, *args)
-    # Your code goes here...
-    info = @snack_box.data[@box_id][name.to_s]['info']
-    tastiness = @snack_box.data[@box_id][name.to_s]['tastiness']
-    return "#{name.capitalize}: #{info} : #{tastiness}"
-    
-  end
+  # def method_missing(name, *args)
+  #   # Your code goes here...
+  #   info = @snack_box.send("get_#{name}_info".to_sym, @box_id)
+  #   tastiness = @snack_box.send("get_#{name}_tastiness".to_sym, @box_id)
+  #   # info = @snack_box.data[@box_id][name.to_s]['info']
+  #   # tastiness = @snack_box.data[@box_id][name.to_s]['tastiness']
+  #   return "#{name.capitalize}: #{info} : #{tastiness}"
+  #   # name = name.to_s
+  #   # case name
+  #   # when 'bone'
+  #   #   return "Bone: #{@snack_box.get_bone_info(@box_id)} : #{@snack_box.get_bone_tastiness(@box_id)}"
+  #   # when 'kibble'
+  #   #   return "Kibble: #{@snack_box.get_kibble_info(@box_id)} : #{@snack_box.get_kibble_tastiness(@box_id)}"
+  #   # when 'treat'
+  #   #   return "Treat: #{@snack_box.get_treat_info(@box_id)} : #{@snack_box.get_treat_tastiness(@box_id)}"
+  #   # else
+  #   # end
+  # end
 
 
   def self.define_snack(name)
-
+    define_method(name) do
+        info = @snack_box.send("get_#{name}_info".to_sym, @box_id)
+        tastiness = @snack_box.send("get_#{name}_tastiness".to_sym, @box_id)
+      puts "#{name.capitalize}: #{info} : #{tastiness}"
+    end
   end
 end
