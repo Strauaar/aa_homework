@@ -42,12 +42,13 @@ Circle.prototype.moveRandom = function (maxX, maxY, mousePosX, mousePosY) {
   let signY = distanceY < 0 ? -1 : 1;
 
   let distance = Math.pow(distanceX,2) + Math.pow(distanceY,2);
-  
+
   let dx = (Math.random() + 2)/(distance);
   let dy = (Math.random() + 2)/(distance);
-  let gConstant = (Math.random()*2 + 400);
-  this.centerX = (this.centerX + (dx * signX * gConstant)) % maxX;
-  this.centerY = (this.centerY + (dy * signY * gConstant)) % maxY;
+  let gConstant = (Math.random()*2 + 500);
+
+  this.centerX = ((Math.random()*2 + this.centerX) + (dx * signX * gConstant)) % maxX;
+  this.centerY = ((Math.random()*2 + this.centerY) + (dy * signY * gConstant)) % maxY;
 };
 
 Circle.prototype.render = function (ctx) {
