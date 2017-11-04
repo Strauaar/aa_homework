@@ -198,19 +198,21 @@ Circle.prototype.moveRandom = function (maxX, maxY, mousePosX, mousePosY) {
     mousePosX = 0;
     mousePosY = 0;
   }
+
   let distanceX = this.centerX - mousePosX;
   let distanceY = this.centerY - mousePosY;
+
   let signX = distanceX < 0 ? -1 : 1;
   let signY = distanceY < 0 ? -1 : 1;
 
   let distance = Math.pow(distanceX,2) + Math.pow(distanceY,2);
 
-  let dx = (Math.random() + 2)/(distance);
-  let dy = (Math.random() + 2)/(distance);
-  let gConstant = (Math.random()*2 + 500);
+  let forceProportionality = (Math.random() + 2)/(distance);
 
-  this.centerX = ((Math.random()*2 + this.centerX) + (dx * signX * gConstant)) % maxX;
-  this.centerY = ((Math.random()*2 + this.centerY) + (dy * signY * gConstant)) % maxY;
+  let gConstant = 500;
+
+  this.centerX = ((Math.random()*2 + this.centerX) + (forceProportionality * signX * gConstant)) % maxX;
+  this.centerY = ((Math.random()*2 + this.centerY) + (forceProportionality * signY * gConstant)) % maxY;
 };
 
 Circle.prototype.render = function (ctx) {
