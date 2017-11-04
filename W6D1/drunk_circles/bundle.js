@@ -201,17 +201,16 @@ Circle.prototype.moveRandom = function (maxX, maxY, mousePosX, mousePosY) {
   // console.log(mousePosX);
   let distanceX = this.centerX - mousePosX;
   let distanceY = this.centerY - mousePosY;
-  // debugger;
+  let signX = distanceX < 0 ? -1 : 1;
+  let signY = distanceY < 0 ? -1 : 1;
+
   let distance = Math.pow(distanceX,2) + Math.pow(distanceY,2);
   // let dx = ((Math.sqrt(Math.pow(distanceX,2) + Math.pow(distanceY,2))) * ((Math.random() * 2) - 1));
   let dx = (Math.random() + 2)/(distance);
   let dy = (Math.random() + 2)/(distance);
   let gConstant = (Math.random()*2 + 400);
-  this.centerX = (this.centerX + (dx * gConstant)) % maxX;
-  this.centerY = (this.centerY + (dy * gConstant)) % maxY;
-  this.centerX;
-  this.centerY;
-
+  this.centerX = (this.centerX + (dx * signX * gConstant)) % maxX;
+  this.centerY = (this.centerY + (dy * signY * gConstant)) % maxY;
 };
 
 Circle.prototype.render = function (ctx) {
