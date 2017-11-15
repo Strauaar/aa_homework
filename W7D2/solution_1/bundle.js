@@ -11848,22 +11848,22 @@ var _root_reducer2 = _interopRequireDefault(_root_reducer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var addLoggingToDispatch = function addLoggingToDispatch(store) {
-  return function (next) {
-    return function (action) {
-      console.log(store.getState());
-      console.log(action);
-      next(action);
-      console.log(store.getState());
-      next(action);
-    };
-  };
-};
+// const addLoggingToDispatch = (store) => {
+//   return function(next) {
+//     return function(action) {
+//       console.log(store.getState());
+//       console.log(action);
+//       next(action);
+//       console.log(store.getState());
+//       next(action);
+//     }
+//   }
+// };
 
 var configureStore = function configureStore() {
   var preloadedState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-  var store = (0, _redux.createStore)(_root_reducer2.default, preloadedState, (0, _redux.applyMiddleware)(addLoggingToDispatch));
+  var store = (0, _redux.createStore)(_root_reducer2.default, preloadedState);
   store.subscribe(function () {
     localStorage.state = JSON.stringify(store.getState());
   });
@@ -12901,27 +12901,55 @@ var _root2 = _interopRequireDefault(_root);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// const addLoggingToDispatch = (store) => {
-//   return function(next) {
-//     return function(action) {
-//       console.log(store.getState());
-//       console.log(action);
-//       next(action);
-//       console.log(store.getState());
-//       next(action);
-//     }
-//   }
-// };
+var addLoggingToDispatch = function addLoggingToDispatch(store) {
+  console.log("in function that has store as argument");
+  return function (next) {
+    console.log("in function that has next has argument");
+    console.log('next: ' + next);
+    return function (action) {
+      console.log("1st middleware, old state:");
+      // console.log(store.getState());
+      // console.log(action);
+      // console.log('invoking action (1st in 1st)...');
+      // next(action);
+      // console.log("1st middleware, new state");
+      // console.log(store.getState());
+      // console.log('invoking action (2nd in 1st)...');
+      next(action);
+    };
+  };
+};
+
+var anotherLogger = function anotherLogger(store) {
+  return function (next) {
+    return function (action) {
+      console.log('2nd middleware, old state:');
+      // console.log(store.getState());
+      // console.log('invoking action (1st in 2nd)...');
+      // next(action);
+      // console.log(`2nd middleware, new state:`);
+      // console.log(store.getState());
+      // console.log('invoking action (2nd in 2nd)...');
+
+      // next(action);
+    };
+  };
+};
 
 var applyMiddlewares = function applyMiddlewares(store) {
   for (var _len = arguments.length, middlewares = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     middlewares[_key - 1] = arguments[_key];
   }
 
+  console.log("first in applyMiddlewares");
   var dispatch = store.dispatch;
   middlewares.forEach(function (middleware) {
+    console.log("in middleware loop");
+
     dispatch = middleware(store)(dispatch);
+    console.log('still in loop: dispatch: ' + dispatch);
   });
+  console.log(Object.assign({}, store, { dispatch: dispatch }));
   return Object.assign({}, store, { dispatch: dispatch });
 };
 
@@ -12929,7 +12957,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var preloadedState = localStorage.state ? JSON.parse(localStorage.state) : {};
   var store = (0, _store2.default)(preloadedState);
 
-  // store = applyMiddlewares(store, addLoggingToDispatch);
+  store = applyMiddlewares(store, addLoggingToDispatch, anotherLogger);
 
   var root = document.getElementById('content');
   _reactDom2.default.render(_react2.default.createElement(_root2.default, { store: store }), root);
